@@ -6,7 +6,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{22CCC419-48AC-A89C-42BB-5AA9CF544AE7}</ProjectGuid>
+    <ProjectGuid>{CAEC561B-372B-3388-A982-CD9BDA9E8CE6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -45,6 +45,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\AudioScript.cs" />
      <Compile Include="Assets\FluidSim.cs" />
      <None Include="Assets\Shaders\Impluse.shader" />
      <None Include="Assets\Shaders\SubtractGradient.shader" />
