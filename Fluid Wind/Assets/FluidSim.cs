@@ -209,7 +209,20 @@ public class FluidSim : MonoBehaviour
         	Jacobi(m_pressureTex[READ], m_divergenceTex, m_pressureTex[WRITE]);
 			Swap(m_pressureTex);
     	}
-		
+
+		if (Input.GetKeyDown ("left")) {
+			m_obstaclePos[0] -= 0.01f;
+		}
+		else if (Input.GetKeyDown ("right")){
+			m_obstaclePos[0] += 0.01f;
+		}
+		else if (Input.GetKeyDown ("up")){
+			m_obstaclePos[1] += 0.01f;
+		}
+		else if (Input.GetKeyDown ("down")){
+			m_obstaclePos[1] -= 0.01f;
+		}
+
 		//Use the pressure tex that was last rendered into. This computes divergence free velocity
 		SubtractGradient(m_velocityTex[READ], m_pressureTex[READ], m_velocityTex[WRITE]);
 		
