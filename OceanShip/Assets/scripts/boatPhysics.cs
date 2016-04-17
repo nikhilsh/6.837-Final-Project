@@ -265,6 +265,47 @@ public class boatPhysics : MonoBehaviour {
 				AddCoordinateToMesh(J_M);
 			}
 
+			//Calculate the center of the triangle
+			Vector3 centerPoint = (vertice_1_pos + vertice_2_pos + vertice_3_pos) / 3f;
+
+
+			//Calculate the distance to the surface from the center of the triangle
+			//DistanceToWater() will transform to worldspace
+			float distance_to_surface = Mathf.Abs((float)DistanceToWater(centerPoint));
+
+			//From localspace to worldspace
+			centerPoint   = transform.TransformPoint(centerPoint);
+			vertice_1_pos = transform.TransformPoint(vertice_1_pos);
+			vertice_2_pos = transform.TransformPoint(vertice_2_pos);
+			vertice_3_pos = transform.TransformPoint(vertice_3_pos);
+
+
+			//Calculate the normal to the triangle
+			Vector3 crossProduct = Vector3.Cross(vertice_2_pos - vertice_1_pos, vertice_3_pos - vertice_1_pos).normalized;
+
+
+			//Test that everything is working
+			Debug.DrawRay(centerPoint, crossProduct * 3f);
+
+
+			//Calculate the area of the triangle by using Heron's formula
+			float a = Vector3.Distance(vertice_1_pos, vertice_2_pos);
+			//float b = Vector3.Distance(vertice_2_pos, vertice_3_pos);
+			float c = Vector3.Distance(vertice_3_pos, vertice_1_pos);
+
+			//float s = (a + b + c) / 2f;
+
+			//float area_heron = Mathf.Sqrt(s * (s-a) * (s-b) * (s-c));
+
+			//Alternative 2 - area of triangle by using sinus
+			float area_sin = (a * c * Mathf.Sin(Vector3.Angle(vertice_2_pos-vertice_1_pos, vertice_3_pos-vertice_1_pos) * Mathf.Deg2Rad)) / 2f;
+
+			float area = area_sin;		
+
+
+			//The buoyancy force
+			AddBuoyancy(distance_to_surface, area, crossProduct, centerPoint);
+
 		}
 
 		//Generate the final underwater mesh
@@ -278,6 +319,26 @@ public class boatPhysics : MonoBehaviour {
 		UnderWaterMesh.RecalculateBounds();
 		//Update the normals to reflect the change
 		UnderWaterMesh.RecalculateNormals();
+	}
+
+	private void AddBuoyancy(float distance_to_surface, float area, Vector3 crossProduct, Vector3 centerPoint) {
+		//The hydrostatic force dF = rho * g * z * dS * n
+		// rho - density of water or whatever medium you have
+		// g - gravity
+		// z - distance to surface
+		// dS - surface area
+		// n - normal to the surface
+
+//		Vector3 F = BoatPhysics.rho_water * Physics.gravity.y * distance_to_surface * area * crossProduct;
+		Vector3 F = new Vector3(0f, 1000f, 0f);
+
+		//The vertical component of the hydrostatic forces do not cancel out
+		//This will cancel out the movement because of waves, which is good because
+		//movement because of waves comes from another force, such as wave drift, and not buoyancy
+		F = new Vector3(0f, F.y, 0f);
+
+		//Should be in worldspace
+		boatRB.AddForceAtPosition(F, centerPoint);
 	}
 
 	//Find the distance from vertice to water
@@ -295,6 +356,32 @@ public class boatPhysics : MonoBehaviour {
 	void AddCoordinateToMesh(Vector3 coord) {
 		underwaterVertices.Add(coord);
 		underwaterTriangles.Add(underwaterVertices.Count - 1);
+	}
+
+	//Will add buoyance so it can float, and drifting from the waves
+	void AddForcesToBoat() {		
+		int i = 0;
+		while (i < underwaterTriangles.Count) {			
+			//The position of the vertice in Vector3 format
+			Vector3 vertice_1_pos = underwaterVertices[underwaterTriangles[i]];
+
+			i++;
+
+			Vector3 vertice_2_pos = underwaterVertices[underwaterTriangles[i]];
+
+			i++;
+
+			Vector3 vertice_3_pos = underwaterVertices[underwaterTriangles[i]];
+
+			i++;
+		}
+	}
+
+	void FixedUpdate() {		
+		//Will add buoyance so it can float, and drifting from the waves
+		if (underwaterTriangles.Count > 0) {
+			AddForcesToBoat();
+		}
 	}
 }
 
