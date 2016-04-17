@@ -10,7 +10,7 @@ public class WaterWakes : MonoBehaviour {
 	MeshFilter waterMeshFilter;
 
 	//The total size in m
-	float waterWidth = 3f;
+	float waterWidth = 10f;
 	//Width of one square (= distance between vertices)
 	float gridSpacing = 0.1f;
 

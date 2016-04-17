@@ -22,6 +22,8 @@ public class boatPhysics : MonoBehaviour {
 	private List<Vector3> underwaterVertices;
 	private List<int> underwaterTriangles;
 
+	private WaveController waveScript;
+
 	Rigidbody boatRB;
 
 	// Use this for initialization
@@ -36,6 +38,11 @@ public class boatPhysics : MonoBehaviour {
 
 		//Change this to stop the boat from oscillating
 		boatRB.maxAngularVelocity = 0.5f;
+
+		//Get the waveControllerScript
+		GameObject gameController = GameObject.FindGameObjectWithTag("GameController");
+
+		waveScript = gameController.GetComponent<WaveController>();
 	}
 	
 	// Update is called once per frame
@@ -305,6 +312,7 @@ public class boatPhysics : MonoBehaviour {
 
 			//The buoyancy force
 			AddBuoyancy(distance_to_surface, area, crossProduct, centerPoint);
+			AddWaveDrifting (area, crossProduct, centerPoint);
 
 		}
 
@@ -329,8 +337,7 @@ public class boatPhysics : MonoBehaviour {
 		// dS - surface area
 		// n - normal to the surface
 
-		Vector3 F = 1000f * Physics.gravity.y * distance_to_surface * area * crossProduct;
-//		Vector3 F = new Vector3(0f, 1000f, 0f);
+		Vector3 F = 1000.0f * Physics.gravity.y * distance_to_surface * area * crossProduct;
 
 		//The vertical component of the hydrostatic forces do not cancel out
 		//This will cancel out the movement because of waves, which is good because
@@ -349,6 +356,8 @@ public class boatPhysics : MonoBehaviour {
 		Vector3 globalVerticePosition = transform.TransformPoint(position);
 
 		float? y_pos = 0f;
+
+		y_pos += waveScript.GetWaveYPos(globalVerticePosition.x, globalVerticePosition.z);
 
 		return globalVerticePosition.y - y_pos;
 	}
@@ -375,6 +384,25 @@ public class boatPhysics : MonoBehaviour {
 
 			i++;
 		}
+	}
+
+	private void AddWaveDrifting(float area, Vector3 normal, Vector3 centerPoint) {
+		//Drifting from waves according to:
+		//http://www.wikiwaves.org/Wave_Drift_Forces
+		// F = 0.5 * rho * g * S * S * n
+		// rho - density of water or whatever medium you have
+		// g - gravity
+		// S - surface area
+		// n - normal to the surface
+
+		//The drifting force
+//		Vector3 F = 0.5f * BoatPhysics.rho_water * Physics.gravity.y * area * area * normal;
+		Vector3 F = 0.5f * 1000.0f * Physics.gravity.y * area * area * normal;
+
+		//Maybe?
+		F = new Vector3(F.x, 0f, F.z);
+
+		boatRB.AddForceAtPosition(F, centerPoint);
 	}
 
 	void FixedUpdate() {		
