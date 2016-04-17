@@ -329,8 +329,8 @@ public class boatPhysics : MonoBehaviour {
 		// dS - surface area
 		// n - normal to the surface
 
-//		Vector3 F = BoatPhysics.rho_water * Physics.gravity.y * distance_to_surface * area * crossProduct;
-		Vector3 F = new Vector3(0f, 1000f, 0f);
+		Vector3 F = 1000f * Physics.gravity.y * distance_to_surface * area * crossProduct;
+//		Vector3 F = new Vector3(0f, 1000f, 0f);
 
 		//The vertical component of the hydrostatic forces do not cancel out
 		//This will cancel out the movement because of waves, which is good because
