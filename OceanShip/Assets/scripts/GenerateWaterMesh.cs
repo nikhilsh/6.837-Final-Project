@@ -14,7 +14,7 @@ public class GenerateWaterMesh : MonoBehaviour {
 	
 	}
 
-	public static List<Vector3[]> GenerateWater(MeshFilter waterMeshFilter, float size, float spacing) {
+	public static List<Vector3[]> GenerateWater(MeshFilter waterMeshFilter, float size, float spacing, float y) {
 		//Determine the number of vertices per row/column (is always a square)
 		int totalVertices = (int)Mathf.Round(size / spacing) + 1;
 
@@ -33,7 +33,7 @@ public class GenerateWaterMesh : MonoBehaviour {
 				//Get the corrdinates of the vertice
 				current_point.x = x * spacing;
 				current_point.z = z * spacing;
-				current_point.y = 0f; //assume always at 0
+				current_point.y = y; //assume always at 0
 
 				vertices2dArray[z][x] = current_point;
 
