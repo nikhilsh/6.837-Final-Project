@@ -10,7 +10,7 @@ public class WaterWakes : MonoBehaviour {
 	MeshFilter waterMeshFilter;
 
 	//The total size in m
-	float waterWidth = 10.0f;
+	float waterWidth = 10f;
 	//Width of one square (= distance between vertices)
 	float gridSpacing = 0.1f;
 
@@ -41,20 +41,16 @@ public class WaterWakes : MonoBehaviour {
 
 	//Store the precomputed kernel values here
 	float[,] storedKernelArray;
-
-
-
 	void Start() {
 		//Need reference to the meshfilter so we can add the water
 		waterMeshFilter = this.GetComponent<MeshFilter>();
 
 		//Create the water mesh
 		//Don't forget to write "using System.Collections.Generic;" at the top
-		List<Vector3[]> height_tmp = GenerateWaterMesh.GenerateWater(waterMeshFilter, waterWidth, gridSpacing, 0.0f);
+		List<Vector3[]> height_tmp = GenerateWaterMesh.GenerateWater(waterMeshFilter, waterWidth, gridSpacing);
 
 		//Get a reference to the watermesh
 		waterMesh = waterMeshFilter.mesh;
-
 
 		//Resize box collider
 		//Need a box collider so the mouse can interact with the water
@@ -65,7 +61,6 @@ public class WaterWakes : MonoBehaviour {
 
 		//Center the mesh to make it easier to know where it is
 		transform.position = new Vector3(-waterWidth/2f, 0f, -waterWidth/2f);
-
 
 		//Precompute the convolution kernel values
 		storedKernelArray = new float[P * 2 + 1, P * 2 + 1];
