@@ -48,15 +48,14 @@
      <Compile Include="Assets\scripts\ExtendedFlycam.cs" />
      <Compile Include="Assets\scripts\GenerateWaterMesh.cs" />
      <Compile Include="Assets\scripts\GenerateWaves.cs" />
-     <Compile Include="Assets\scripts\WaterWakes.cs" />
      <Compile Include="Assets\scripts\WaveController.cs" />
      <Compile Include="Assets\scripts\boatPhysics.cs" />
      <Compile Include="Assets\scripts\seabottom.cs" />
- <Reference Include="UnityEngine.UI">
- <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
- </Reference>
  <Reference Include="UnityEngine.Networking">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.UI">
+ <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
