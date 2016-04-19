@@ -17,12 +17,12 @@ public class WaveController : MonoBehaviour {
 
 	//Wave height and speed
 	public float scale = 0.3f;
-	public float speed = 1.0f;
+	public float speed = 1.2f;
 	//The width between the wave peaks
 	public float waveDistance = 1f;
 	//Noise parameters
-	public float noiseStrength = 1f;
-	public float noiseWalk = 1f;
+	public float noiseStrength = 1.3f;
+	public float noiseWalk = 1.3f;
 
 	//Basic idea from http://answers.unity3d.com/questions/443031/sinus-for-rolling-waves.html
 	public float GetWaveYPos(float x_coord, float z_coord) {
@@ -35,7 +35,7 @@ public class WaveController : MonoBehaviour {
 		y_coord += Mathf.Sin((Time.time * speed + z_coord) / waveDistance) * scale;
 
 		//Add noise to make it more realistic
-		//y_coord += Mathf.PerlinNoise(x_coord + noiseWalk, z_coord + Mathf.Sin(Time.time * 0.1f)) * noiseStrength;
+		y_coord += Mathf.PerlinNoise(x_coord + noiseWalk, z_coord + Mathf.Sin(Time.time * 0.1f)) * noiseStrength;
 
 		return y_coord;
 	}		
