@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GenerateWaves : MonoBehaviour {
+public class GenerateWaves : MonoBehaviour, AudioScript.AudioCallbacks{
 
 	//The water mesh
 	Mesh waterMesh;
@@ -24,15 +24,20 @@ public class GenerateWaves : MonoBehaviour {
 		GameObject gameController = GameObject.FindGameObjectWithTag("GameController");
 
 		waveScript = gameController.GetComponent<WaveController>();
+
+		AudioScript processor = FindObjectOfType<AudioScript>();
+		processor.addAudioCallback(this);
 	}
 
 
 
 	void Update() {
-		MoveSea();
 	}
 
-
+	public void onOnbeatDetected()
+	{
+		MoveSea();
+	}
 
 	void MoveSea() {
 		newVertices = new Vector3[originalVertices.Length];
