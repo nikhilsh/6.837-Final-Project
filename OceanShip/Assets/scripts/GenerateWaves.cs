@@ -32,11 +32,12 @@ public class GenerateWaves : MonoBehaviour, AudioScript.AudioCallbacks{
 
 
 	void Update() {
+		MoveSea();
 	}
 
 	public void onOnbeatDetected()
 	{
-		MoveSea();
+		Debug.Log("Beat!!!");
 	}
 
 	void MoveSea() {
