@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GenerateWaves : MonoBehaviour, AudioScript.AudioCallbacks{
 
 	//The water mesh
 	Mesh waterMesh;
+	public float delta;
 
 	//The new values of the vertices after we applied the wave algorithm are stored here
 	private Vector3[] newVertices;
@@ -16,6 +18,10 @@ public class GenerateWaves : MonoBehaviour, AudioScript.AudioCallbacks{
 
 	void Start() {
 		//Get the water mesh
+
+		waterMesh = this.GetComponent<MeshFilter>().mesh;
+
+		GenerateWaterMesh.GenerateWater (this.GetComponent<MeshFilter>(), 10.0f, 0.5f, 0.0f);
 		waterMesh = this.GetComponent<MeshFilter>().mesh;
 
 		originalVertices = waterMesh.vertices;
@@ -25,10 +31,12 @@ public class GenerateWaves : MonoBehaviour, AudioScript.AudioCallbacks{
 
 		waveScript = gameController.GetComponent<WaveController>();
 
-		AudioScript processor = FindObjectOfType<AudioScript>();
-		processor.addAudioCallback(this);
-	}
+//		AudioScript processor = FindObjectOfType<AudioScript>();
+//		processor.addAudioCallback(this);
 
+
+//		waterMesh = CreateMesh ();
+	}
 
 
 	void Update() {
