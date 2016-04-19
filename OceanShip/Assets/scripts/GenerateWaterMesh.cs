@@ -31,8 +31,8 @@ public class GenerateWaterMesh : MonoBehaviour {
 				Vector3 current_point = new Vector3();
 
 				//Get the corrdinates of the vertice
-				current_point.x = x * spacing;
-				current_point.z = z * spacing;
+				current_point.x = x * spacing -5.0f;
+				current_point.z = z * spacing -5.0f;
 				current_point.y = y; //assume always at 0
 
 				vertices2dArray[z][x] = current_point;
