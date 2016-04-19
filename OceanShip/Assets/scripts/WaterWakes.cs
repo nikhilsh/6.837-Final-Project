@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class WaterWakes : MonoBehaviour {
+public class WaterWakes : MonoBehaviour, AudioDetect.AudioCallbacks {
 
 	// Use this for initialization
 	//Mesh parameters
@@ -10,7 +10,7 @@ public class WaterWakes : MonoBehaviour {
 	MeshFilter waterMeshFilter;
 
 	//The total size in m
-	float waterWidth = 10.0f;
+	float waterWidth = 10f;
 	//Width of one square (= distance between vertices)
 	float gridSpacing = 0.1f;
 
@@ -20,7 +20,7 @@ public class WaterWakes : MonoBehaviour {
 	public float alpha = 0.9f;
 	//P - kernel size
 	//6 is the smallest value that gives water-like motion
-	int P = 8;
+	int P = 20;
 	//Should be neg or the waves will move in the wrong direction
 	float g = -9.81f;
 
@@ -98,6 +98,8 @@ public class WaterWakes : MonoBehaviour {
 				}
 			}
 		}
+		AudioDetect processor = FindObjectOfType<AudioDetect>();
+		processor.addAudioCallback(this);
 	}
 
 	void Update() {
@@ -108,7 +110,7 @@ public class WaterWakes : MonoBehaviour {
 			MoveWater(0.02f);
 			updateTimer = 0f;
 		}
-		CreateWaterWakesWithMouse();
+//		CreateWaterWakesWithMouse();
 	}
 
 	//Add water wakes to the water mesh
@@ -164,6 +166,26 @@ public class WaterWakes : MonoBehaviour {
 		return G;
 	}
 
+	public void onOnbeatDetected()
+	{
+		for (int j = 0; j < arrayLength; j++) {
+			for (int i = 0; i < arrayLength; i++) {
+				//Find the closest vertice within a certain distance from the mouse
+				Vector3 localPos = new Vector3(4.2f, 0.1f, 3.0f);
+				float sqrDistanceToVertice = (height[j][i] - localPos).sqrMagnitude;
+
+				//If the vertice is within a certain range
+				float sqrDistance = 0.2f * 0.2f;
+				if (sqrDistanceToVertice < sqrDistance) {
+					//Get a smaller value the greater the distance is to make it look better
+					float distanceCompensator = 1 - (sqrDistanceToVertice / sqrDistance);
+
+					//Add the force that now depends on how far the vertice is from the mouse
+					source[j][i].y += -0.02f * distanceCompensator;
+				}
+			}
+		}
+	}
 
 	//G_zero
 	private float CalculateG_zero() {		
@@ -360,7 +382,7 @@ public class WaterWakes : MonoBehaviour {
 
 				//Convert the mouse position from global to local
 				Vector3 localPos = transform.InverseTransformPoint(hit.point);
-
+				Debug.Log (localPos);
 				//Loop through all the vertices of the water mesh
 				for (int j = 0; j < arrayLength; j++) {
 					for (int i = 0; i < arrayLength; i++) {
