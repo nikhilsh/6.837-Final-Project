@@ -343,6 +343,7 @@ public class boatPhysics : MonoBehaviour {
 		//This will cancel out the movement because of waves, which is good because
 		//movement because of waves comes from another force, such as wave drift, and not buoyancy
 		F = new Vector3(0f, F.y, 0f);
+//		F = new Vector3(F.x, F.y, F.z);
 
 		//Should be in worldspace
 		boatRB.AddForceAtPosition(F, centerPoint);
