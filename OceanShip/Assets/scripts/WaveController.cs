@@ -32,7 +32,7 @@ public class WaveController : MonoBehaviour {
 		//Using only vertex.y will produce an up/down movement
 		//x_coord + y_coord + z_coord rolling waves sideways
 		//x_coord * z_coord produces a moving sea without rolling waves
-		y_coord += Mathf.Sin((Time.time * speed + z_coord) / waveDistance) * scale;
+		y_coord += Mathf.Sin((Time.time * speed + x_coord + y_coord + z_coord ) / waveDistance) * scale;
 
 		//Add noise to make it more realistic
 		y_coord += Mathf.PerlinNoise(x_coord + noiseWalk, z_coord + Mathf.Sin(Time.time * 0.1f)) * noiseStrength;
