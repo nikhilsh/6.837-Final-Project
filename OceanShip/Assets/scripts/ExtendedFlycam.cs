@@ -14,7 +14,7 @@ public class ExtendedFlycam : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Screen.lockCursor = true;
+		Screen.lockCursor = false;
 	}
 	
 	// Update is called once per frame

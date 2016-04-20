@@ -5,20 +5,14 @@ using System.Collections.Generic;
 
 public class boatPhysics : MonoBehaviour {
 
-	//The game object where we will display the mesh that is below the water
 	public GameObject UnderwaterMeshOBJ;
 
-	//The original Boat
 	private Mesh BoatMesh;
-	//These are always constant and comes from the original hull
-	//Coordinates of all vertices 
+
 	private Vector3[] originalVerticesArray;
-	//Positions in allVerticesArray, such as 0, 3, 5, to build triangles
 	private int[] originalTrianglesArray;
 
-	//The part of the boat that's underwater
 	private Mesh UnderWaterMesh;
-	//These will be transformed to arrays later
 	private List<Vector3> underwaterVertices;
 	private List<int> underwaterTriangles;
 
@@ -26,7 +20,6 @@ public class boatPhysics : MonoBehaviour {
 
 	Rigidbody boatRB;
 
-	// Use this for initialization
 	void Start () {
 		UnderWaterMesh = UnderwaterMeshOBJ.GetComponent<MeshFilter>().mesh;
 		BoatMesh = GetComponent<MeshFilter>().mesh;
@@ -36,10 +29,8 @@ public class boatPhysics : MonoBehaviour {
 
 		boatRB = GetComponent<Rigidbody>();
 
-		//Change this to stop the boat from oscillating
 		boatRB.maxAngularVelocity = 0.5f;
 
-		//Get the waveControllerScript
 		GameObject gameController = GameObject.FindGameObjectWithTag("GameController");
 
 		waveScript = gameController.GetComponent<WaveController>();
@@ -51,7 +42,6 @@ public class boatPhysics : MonoBehaviour {
 	}
 
 	void GenerateUnderwaterMesh() {
-		//These store the final data we need to create the mesh that's underwater
 		underwaterVertices = new List<Vector3>();
 		underwaterTriangles = new List<int>();
 
@@ -59,24 +49,18 @@ public class boatPhysics : MonoBehaviour {
 		int i = 0;
 		while (i < originalTrianglesArray.Length) {
 			//Find the distance from each vertice in the current triangle to the water
-			//Negative distance means below water
-
-			//The position of the vertice in Vector3 format (need to save this position for later)
+		
 			Vector3 vertice_1_pos = originalVerticesArray[originalTrianglesArray[i]];
 			float? distance1 = DistanceToWater(vertice_1_pos);
-
 			i++;
 
 			Vector3 vertice_2_pos = originalVerticesArray[originalTrianglesArray[i]];
 			float? distance2 = DistanceToWater(vertice_2_pos);
-
 			i++;
 
 			Vector3 vertice_3_pos = originalVerticesArray[originalTrianglesArray[i]];
 			float? distance3 = DistanceToWater(vertice_3_pos);
-
 			i++;
-
 
 			//Continue to the next triangle if all triangles are above the water
 			if (distance1 > 0f && distance2 > 0f && distance3 > 0f) {
@@ -89,12 +73,11 @@ public class boatPhysics : MonoBehaviour {
 			}
 
 			//Sort the distances from high above water to low below water
-			//Cant create these objects above or the sorting algorithm will complain about float? =
 			Distance distance1OBJ = new Distance();
 			Distance distance2OBJ = new Distance();
 			Distance distance3OBJ = new Distance();
 
-			distance1OBJ.distance = (float)distance1; // from float? to float
+			distance1OBJ.distance = (float)distance1; 
 			distance1OBJ.name = "one";
 			distance1OBJ.verticePos = vertice_1_pos;
 
@@ -129,8 +112,6 @@ public class boatPhysics : MonoBehaviour {
 
 				//Left of H is M
 				//Right of H is L
-
-				//Find the name of M
 				string M_name = "temp";
 				if (allDistancesList[0].name == "one") {
 					M_name = "three";
@@ -189,8 +170,6 @@ public class boatPhysics : MonoBehaviour {
 
 				Vector3 I_L = LI_L + L;
 
-
-				//Build the 2 new triangles
 				AddCoordinateToMesh(M);
 				AddCoordinateToMesh(I_M);
 				AddCoordinateToMesh(I_L);
@@ -201,9 +180,6 @@ public class boatPhysics : MonoBehaviour {
 			}
 			//Two vertices are above the water, the other is below
 			else if (allDistancesList[0].distance > 0f && allDistancesList[1].distance > 0f && allDistancesList[2].distance < 0f) {
-				//H and M are above the water
-				//H is after the vertice that's below water, which is L
-				//So we know which one is L because it is last in the sorted list
 				Vector3 L = allDistancesList[2].verticePos;
 
 				//Find the name of H
@@ -242,10 +218,7 @@ public class boatPhysics : MonoBehaviour {
 					h_H = allDistancesList[0].distance;
 					h_M = allDistancesList[1].distance;
 				}
-
-
-				//Now we can find where to cut the triangle
-
+					
 				//Point J_M
 				Vector3 LM = M - L;
 
@@ -277,7 +250,6 @@ public class boatPhysics : MonoBehaviour {
 
 
 			//Calculate the distance to the surface from the center of the triangle
-			//DistanceToWater() will transform to worldspace
 			float distance_to_surface = Mathf.Abs((float)DistanceToWater(centerPoint));
 
 			//From localspace to worldspace
@@ -290,21 +262,14 @@ public class boatPhysics : MonoBehaviour {
 			//Calculate the normal to the triangle
 			Vector3 crossProduct = Vector3.Cross(vertice_2_pos - vertice_1_pos, vertice_3_pos - vertice_1_pos).normalized;
 
-
-			//Test that everything is working
-			Debug.DrawRay(centerPoint, crossProduct * 3f);
+			//test
+//			Debug.DrawRay(centerPoint, crossProduct * 3f);
 
 
 			//Calculate the area of the triangle by using Heron's formula
 			float a = Vector3.Distance(vertice_1_pos, vertice_2_pos);
-			//float b = Vector3.Distance(vertice_2_pos, vertice_3_pos);
 			float c = Vector3.Distance(vertice_3_pos, vertice_1_pos);
 
-			//float s = (a + b + c) / 2f;
-
-			//float area_heron = Mathf.Sqrt(s * (s-a) * (s-b) * (s-c));
-
-			//Alternative 2 - area of triangle by using sinus
 			float area_sin = (a * c * Mathf.Sin(Vector3.Angle(vertice_2_pos-vertice_1_pos, vertice_3_pos-vertice_1_pos) * Mathf.Deg2Rad)) / 2f;
 
 			float area = area_sin;		
@@ -320,12 +285,9 @@ public class boatPhysics : MonoBehaviour {
 		UnderWaterMesh.Clear();
 		UnderWaterMesh.name = "Underwater Mesh";
 		UnderWaterMesh.vertices = underwaterVertices.ToArray();
-		//UnderWaterMesh.uv = uvs.ToArray();
 		UnderWaterMesh.triangles = underwaterTriangles.ToArray();
 
-		//Ensure the bounding volume is correct
 		UnderWaterMesh.RecalculateBounds();
-		//Update the normals to reflect the change
 		UnderWaterMesh.RecalculateNormals();
 	}
 
@@ -339,13 +301,8 @@ public class boatPhysics : MonoBehaviour {
 
 		Vector3 F = 1000.0f * Physics.gravity.y * distance_to_surface * area * crossProduct;
 
-		//The vertical component of the hydrostatic forces do not cancel out
-		//This will cancel out the movement because of waves, which is good because
-		//movement because of waves comes from another force, such as wave drift, and not buoyancy
 		F = new Vector3(0f, F.y, 0f);
-//		F = new Vector3(F.x, F.y, F.z);
 
-		//Should be in worldspace
 		boatRB.AddForceAtPosition(F, centerPoint);
 	}
 
@@ -374,22 +331,17 @@ public class boatPhysics : MonoBehaviour {
 		while (i < underwaterTriangles.Count) {			
 			//The position of the vertice in Vector3 format
 			Vector3 vertice_1_pos = underwaterVertices[underwaterTriangles[i]];
-
 			i++;
 
 			Vector3 vertice_2_pos = underwaterVertices[underwaterTriangles[i]];
-
 			i++;
 
 			Vector3 vertice_3_pos = underwaterVertices[underwaterTriangles[i]];
-
 			i++;
 		}
 	}
 
 	private void AddWaveDrifting(float area, Vector3 normal, Vector3 centerPoint) {
-		//Drifting from waves according to:
-		//http://www.wikiwaves.org/Wave_Drift_Forces
 		// F = 0.5 * rho * g * S * S * n
 		// rho - density of water or whatever medium you have
 		// g - gravity
@@ -397,10 +349,8 @@ public class boatPhysics : MonoBehaviour {
 		// n - normal to the surface
 
 		//The drifting force
-//		Vector3 F = 0.5f * BoatPhysics.rho_water * Physics.gravity.y * area * area * normal;
 		Vector3 F = 0.5f * 1000.0f * Physics.gravity.y * area * area * normal;
 
-		//Maybe?
 		F = new Vector3(F.x, 0f, F.z);
 
 		boatRB.AddForceAtPosition(F, centerPoint);
@@ -417,13 +367,9 @@ public class boatPhysics : MonoBehaviour {
 
 
 //Help class to sort the distances
-//Requires "using System;" at the top
 public class Distance : IComparable<Distance> {
-	//The distance to water
 	public float distance;
-	//We also need to store a name so we can form clockwise triangles
 	public string name;
-	//The Vector3 position of the vertice
 	public Vector3 verticePos;
 
 	public int CompareTo(Distance other) {
