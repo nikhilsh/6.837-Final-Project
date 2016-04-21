@@ -5,6 +5,8 @@ Project("{9EB4AEED-EC1B-CD64-5425-2EE383D10561}") = "OceanShip", "Assembly-CShar
 EndProject
 Project("{9EB4AEED-EC1B-CD64-5425-2EE383D10561}") = "OceanShip", "Assembly-CSharp.csproj", "{8336DBEB-77B7-56EE-129F-675A3345F431}"
 EndProject
+Project("{9EB4AEED-EC1B-CD64-5425-2EE383D10561}") = "OceanShip", "Assembly-CSharp-Editor.csproj", "{869BDC51-784E-4190-78A8-F50E337391A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{8336DBEB-77B7-56EE-129F-675A3345F431}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8336DBEB-77B7-56EE-129F-675A3345F431}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8336DBEB-77B7-56EE-129F-675A3345F431}.Release|Any CPU.Build.0 = Release|Any CPU
+		{869BDC51-784E-4190-78A8-F50E337391A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{869BDC51-784E-4190-78A8-F50E337391A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{869BDC51-784E-4190-78A8-F50E337391A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{869BDC51-784E-4190-78A8-F50E337391A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
