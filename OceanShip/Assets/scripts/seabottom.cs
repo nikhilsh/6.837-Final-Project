@@ -2,20 +2,22 @@
 using System.Collections;
 
 public class seabottom : MonoBehaviour {
-	// Make seabottom same size
-	//The total size in m
-	float waterWidth = 10.0f;
-	//Width of one square (= distance between vertices)
-	float gridSpacing = 1.0f;
+
+	Mesh seabedMesh;
+	private WorldController worldScript;
 
 	// Use this for initialization
 	void Start () {
-		// Seabottom
-		MeshFilter seabottomMeshFilter = this.GetComponent<MeshFilter>();
+		//Get the controllerScripts
+		GameObject gameController = GameObject.FindGameObjectWithTag("GameController");
+		worldScript = gameController.GetComponent<WorldController> ();
 
-		GenerateWaterMesh.GenerateWater(seabottomMeshFilter, waterWidth, gridSpacing, -5.0f);
+		//Get and update seabed mesh
+		seabedMesh = this.GetComponent<MeshFilter>().mesh;
+		GenerateWaterMesh.GenerateWater (this.GetComponent<MeshFilter>(), worldScript.width, 0.5f, 0.0f);
+		seabedMesh = this.GetComponent<MeshFilter>().mesh;
 
-		transform.position = new Vector3(-waterWidth/2.0f, -3.0f, -waterWidth/2.0f);
+		this.transform.position = new Vector3 (0.0f, -worldScript.height, 0.0f);
 
 	}
 	

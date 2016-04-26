@@ -13,7 +13,7 @@ public class ExtendedFlycam : MonoBehaviour {
 	private float rotationY = 0.0f;
 
 	void Start () {
-		Screen.lockCursor = false;
+		Screen.lockCursor = true;
 	}
 
 	void Update () {

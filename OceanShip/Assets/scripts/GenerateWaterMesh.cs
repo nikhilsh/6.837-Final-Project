@@ -26,8 +26,8 @@ public class GenerateWaterMesh : MonoBehaviour {
 			for (int x = 0; x < totalVertices; x++) {
 				Vector3 current_point = new Vector3();
 
-				current_point.x = x * spacing -5.0f;
-				current_point.z = z * spacing -5.0f;
+				current_point.x = x * spacing - (size/2.0f);
+				current_point.z = z * spacing - (size/2.0f);
 				current_point.y = y;
 
 				vertices2dArray[z][x] = current_point;

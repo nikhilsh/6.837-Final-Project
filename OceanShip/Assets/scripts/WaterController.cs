@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
-public class GenerateWaves : MonoBehaviour, AudioScript.AudioCallbacks{
+public class WaterController : MonoBehaviour {
 
 	Mesh waterMesh;
 
@@ -14,30 +13,24 @@ public class GenerateWaves : MonoBehaviour, AudioScript.AudioCallbacks{
 	private WaveController waveScript;
 	private WorldController worldScript;
 
+	public float density = 1000.0f;
+
 	void Start() {
-		
 		//Get the controllerScripts
 		GameObject gameController = GameObject.FindGameObjectWithTag("GameController");
 		waveScript = gameController.GetComponent<WaveController>();
 		worldScript = gameController.GetComponent<WorldController> ();
 
-		//Get the water mesh
+		//Get and update water mesh
 		waterMesh = this.GetComponent<MeshFilter>().mesh;
 		GenerateWaterMesh.GenerateWater (this.GetComponent<MeshFilter>(), worldScript.width, 0.5f, 0.0f);
 		waterMesh = this.GetComponent<MeshFilter>().mesh;
 
 		originalVertices = waterMesh.vertices;
-
 	}
-
-
+		
 	void Update() {
 		MoveSea();
-	}
-
-	public void onOnbeatDetected()
-	{
-		Debug.Log("Beat!!!");
 	}
 
 	void MoveSea() {

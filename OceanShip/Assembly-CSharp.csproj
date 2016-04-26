@@ -50,9 +50,12 @@
      <Compile Include="Assets\scripts\ExtendedFlycam.cs" />
      <Compile Include="Assets\scripts\GenerateWaterMesh.cs" />
      <Compile Include="Assets\scripts\GenerateWaves.cs" />
+     <Compile Include="Assets\scripts\WaterController.cs" />
      <Compile Include="Assets\scripts\WaveController.cs" />
+     <Compile Include="Assets\scripts\WorldController.cs" />
      <Compile Include="Assets\scripts\boatPhysics.cs" />
      <Compile Include="Assets\scripts\seabottom.cs" />
+     <Compile Include="Assets\wallController.cs" />
      <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
      <None Include="Assets\Standard Assets\Environment\Water\Water\Shaders\FXWaterPro.shader" />
  <Reference Include="UnityEngine.UI">
